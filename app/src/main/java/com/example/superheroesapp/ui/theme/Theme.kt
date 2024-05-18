@@ -106,7 +106,7 @@ private fun setUpEdgeToEdge(view: View, darkTheme: Boolean) {
 fun SuperheroesAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = false,
+    dynamicColor: Boolean = false, // testing my theme colors first
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

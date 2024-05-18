@@ -7,9 +7,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,13 +18,13 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.superheroesapp.model.Hero
 import com.example.superheroesapp.model.HeroesRepository
@@ -64,7 +64,9 @@ fun SuperHeroCard(hero: Hero, modifier: Modifier = Modifier) {
         Row(
             modifier = modifier
                 .padding(all = dimensionResource(id = R.dimen.mediumPadding))
-                .height(dimensionResource(id = R.dimen.cardHeightAndImageSize))
+                // setting a minimum height the row layout can have
+                // row can have a >= minimum height depending on the height of it's children
+                .sizeIn(minHeight = dimensionResource(id = R.dimen.cardHeightAndImageSize))
         ) {
             Column(modifier = modifier.weight(1f)) {
                 Text(
@@ -74,8 +76,7 @@ fun SuperHeroCard(hero: Hero, modifier: Modifier = Modifier) {
                 Text(
                     text = stringResource(id = hero.superPowerRes),
                     style = MaterialTheme.typography.bodyLarge,
-                    modifier = modifier.weight(1f),
-                    overflow = TextOverflow.Visible
+//                    overflow = TextOverflow.Visible
                 )
             }
 
@@ -89,7 +90,8 @@ fun SuperHeroCard(hero: Hero, modifier: Modifier = Modifier) {
                 Image(
                     painter = painterResource(id = hero.picRes),
                     contentDescription = null,
-                    contentScale = ContentScale.Crop
+                    alignment = Alignment.Center,
+                    contentScale = ContentScale.Fit
                 )
             }
         }
