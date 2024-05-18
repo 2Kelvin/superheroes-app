@@ -1,13 +1,18 @@
 package com.example.superheroesapp
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
@@ -19,10 +24,30 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.superheroesapp.model.Hero
 import com.example.superheroesapp.model.HeroesRepository
 import com.example.superheroesapp.ui.theme.SuperheroesAppTheme
+
+// all superheroes in a LazyColumn list
+@Composable
+fun AllSuperHeroes(
+    allHeroes: List<Hero>,
+    modifier: Modifier = Modifier,
+    contentPd: PaddingValues = PaddingValues(dimensionResource(R.dimen.mediumPadding))
+) {
+    LazyColumn(
+        modifier = modifier.padding(dimensionResource(id = R.dimen.mediumPadding)),
+        contentPadding = contentPd,
+        // vertical space between each hero card
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.mediumPadding))
+    ) {
+        items(allHeroes) {
+            SuperHeroCard(hero = it)
+        }
+    }
+}
 
 // superhero card
 @Composable
@@ -38,17 +63,19 @@ fun SuperHeroCard(hero: Hero, modifier: Modifier = Modifier) {
     ) {
         Row(
             modifier = modifier
-                .padding(dimensionResource(id = R.dimen.mediumPadding))
+                .padding(all = dimensionResource(id = R.dimen.mediumPadding))
                 .height(dimensionResource(id = R.dimen.cardHeightAndImageSize))
         ) {
-            Column {
+            Column(modifier = modifier.weight(1f)) {
                 Text(
                     text = stringResource(id = hero.nameRes),
                     style = MaterialTheme.typography.displaySmall
                 )
                 Text(
                     text = stringResource(id = hero.superPowerRes),
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = modifier.weight(1f),
+                    overflow = TextOverflow.Visible
                 )
             }
 
@@ -56,13 +83,13 @@ fun SuperHeroCard(hero: Hero, modifier: Modifier = Modifier) {
 
             Box(
                 modifier = modifier
-                    .height(dimensionResource(R.dimen.cardHeightAndImageSize))
+                    .size(dimensionResource(R.dimen.cardHeightAndImageSize))
                     .clip(MaterialTheme.shapes.small)
             ) {
                 Image(
                     painter = painterResource(id = hero.picRes),
                     contentDescription = null,
-                    contentScale = ContentScale.Fit
+                    contentScale = ContentScale.Crop
                 )
             }
         }
@@ -71,16 +98,17 @@ fun SuperHeroCard(hero: Hero, modifier: Modifier = Modifier) {
 
 @Preview
 @Composable
-fun CardLightPreview() {
+fun AllCardLightPreview() {
     SuperheroesAppTheme(darkTheme = false) {
-        SuperHeroCard(hero = HeroesRepository.heroes[0])
+        AllSuperHeroes(allHeroes = HeroesRepository.heroes)
+
     }
 }
 
 @Preview
 @Composable
-fun CardDarkPreview() {
+fun AllCardDarkPreview() {
     SuperheroesAppTheme(darkTheme = true) {
-        SuperHeroCard(hero = HeroesRepository.heroes[0])
+        AllSuperHeroes(allHeroes = HeroesRepository.heroes)
     }
 }
